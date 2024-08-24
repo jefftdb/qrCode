@@ -5,10 +5,17 @@ from PIL import Image
 from model.icon import Icon
 from model.icon_list import icon_list
 import os
+from model.pagamento import getPublicKey,pagar_com_pix
+from flask_wtf.csrf import CSRFProtect
+
+
 
 app = Flask('__name__', template_folder="view/templates", static_folder='view/static')
 icones = []
 
+app.config['SECRET_KEY'] = 'Jefferson_pagseguro'
+
+csrf = CSRFProtect(app)
 # Iterando sobre os itens do dicionário
 for key, value in icon_list.items():
     name = value['name']
@@ -17,6 +24,9 @@ for key, value in icon_list.items():
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    data = {}
+    data['publickey'] = getPublicKey()
+
     if request.method == 'POST':
         link = request.form['link']
         icon_name = request.form['icon']
@@ -24,10 +34,10 @@ def index():
         icon_obj = next((icon for icon in icones if icon.name == icon_name), None)
 
         if icon_obj:
-            print(link, icon_obj)
+            pagar_com_pix()
             return makeQrCode(link, icon_obj)
 
-    return render_template('index.html', icones=icones)
+    return render_template('index.html', icones=icones, data= data)
 
 def makeQrCode(link, icon):
     logo = Image.open('view/static/' + icon.endereco)

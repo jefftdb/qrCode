@@ -34,6 +34,9 @@
             <div class="card-body">
                 <h3 class="card-title text-center mb-4">QR Code:</h3>
                 <form method="POST">
+                    <input type="hidden" name="publicKey" id="publicKey" value="{{publicKey}}">
+                    <input type="hidden" name="encryptedCard" id="encryptedCard" value="">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <div class="mb-3">
                         <label for="link" class="form-label">Insira o link:</label>
                         <input type="url" class="form-control" id="link" name ="link" placeholder="https://example.com" required>
