@@ -1,0 +1,44 @@
+{% extends 'base_template.html' %}
+{% block content%}   
+
+<body>
+    <div class="payment-container">
+        <h2><img style="width: 80px; height: 80px;" src="{{url_for('static', filename='icon/pix.png' )}}">Pagamento com Pix</h2>
+        <p>Utilize o QR Code abaixo para realizar o pagamento.</p>
+        <img class="img-fluid qr-code" id="modalQRCode" src="{{img_qrCode}}" alt="QR Code"></p> 
+        <p>Ou copie o código Pix abaixo:</p>
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" id="modalTextoPix" readonly value="{{link_qrCode}}">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" id="copyButton">Copiar</button>
+            </div>
+        </div>
+        <div id="copyAlert" class="alert alert-success" style="display:none;" role="alert">
+            Código Pix copiado!
+        </div>
+    </div>
+
+   <script>
+    var charge_id = {{ charge_id | tojson }};
+var link = {{ link | tojson }};
+var icon = {{ icon | tojson }};
+
+console.log("Charge ID:", charge_id);
+
+setInterval(function() {
+    fetch(`/verificar_pagamento/${charge_id}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.status);
+            if (data.status === 'PAY') {
+                window.location.href = `/make_qr_code?link=${encodeURIComponent(link)}&icon_name=${encodeURIComponent(icon.name)}&icon_endereco=${encodeURIComponent(icon.endereco)}`;
+            } else {
+                setTimeout(() => verificarPagamento(charge_id), 5000);
+            }
+        })
+        .catch(error => console.error('Erro:', error));
+}, 5000); // Verifica a cada 5 segundos
+   </script>
+{% endblock content%}
+
+

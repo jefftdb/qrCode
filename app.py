@@ -1,6 +1,7 @@
 
 import qrcode
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for,jsonify
+import requests
 from PIL import Image
 from model.icon import Icon
 from model.icon_list import icon_list
@@ -22,6 +23,7 @@ for key, value in icon_list.items():
     link = value['link']
     icones.append(Icon(name, link))
 
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     data = {}
@@ -34,12 +36,40 @@ def index():
         icon_obj = next((icon for icon in icones if icon.name == icon_name), None)
 
         if icon_obj:
-            pagar_com_pix()
-            return makeQrCode(link, icon_obj)
+            # Realiza o pagamento e obtém o charge_id
+            charge_id = pagar_com_pix()
+            
+            # Verifica o status do pagamento usando o charge_id          
+            try:
+                response = requests.get(f"http://127.0.0.1:5000/verificar_pagamento/{charge_id}")
+                response_data = response.json()
+                img_qrCode = response_data.get('img_qrCode', '')
+                link_qrCode = response_data.get('link_qrCode', '')
+                status = response_data.get('status', '')
 
-    return render_template('index.html', icones=icones, data= data)
+                if status != 'PAY':
+                    # Verifica se img_qrCode e link_qrCode são válidos
+                    img_qrCode = img_qrCode if img_qrCode else ''
+                    link_qrCode = link_qrCode if link_qrCode else ''
+                    return render_template('pagamento.html', img_qrCode=img_qrCode, link_qrCode=link_qrCode, charge_id=charge_id,link = link,icon = icon_obj.to_dict())
+                
+                return makeQrCode()
+            except Exception as e:
+                print("Erro ao verificar pagamento:", e)
+                
+                return jsonify({'error': 'Erro ao verificar pagamento'}), 500
+     
+    return render_template('index.html', icones=icones, data=data)
 
-def makeQrCode(link, icon):
+@app.route('/make_qr_code')
+def makeQrCode():
+    link = request.args.get('link')
+    icon_name = request.args.get('icon_name')
+    icon_endereco = request.args.get('icon_endereco')
+
+    # Create an instance of Icon with the provided parameters
+    icon = Icon(name=icon_name, endereco=icon_endereco)
+
     logo = Image.open('view/static/' + icon.endereco)
 
     basewidth = 100
@@ -53,30 +83,47 @@ def makeQrCode(link, icon):
     QRcode.add_data(link)
     QRcode.make()
 
-    # taking color name from user
     QRcolor = 'Black'
-  
-    # adding color to QR code
     QRimg = QRcode.make_image(fill_color=QRcolor, back_color="white").convert('RGB')
 
-    # set size of QR code
     pos = ((QRimg.size[0] - logo.size[0]) // 2, (QRimg.size[1] - logo.size[1]) // 2)
     QRimg.paste(logo, pos)
 
-    # Supondo que QRimg seja o objeto da imagem gerada e `icon.name` o nome do ícone
     image_filename = 'QRCode_' + icon.name + '.png'
-
-    # Caminho completo dentro da pasta static
     image_path = os.path.join(app.static_folder, 'qrcodes/', image_filename)
-
-    # Crie o diretório 'qrcodes' dentro de 'static' se não existir
     os.makedirs(os.path.dirname(image_path), exist_ok=True)
-
-    # Salvando a imagem
     QRimg.save(image_path)
 
-    # Gerar a URL da imagem
-    image_url = url_for('static', filename=os.path.join('qrcodes/', image_filename))
+    image_url = 'qrcodes/' + image_filename
 
-    # Retornando a tag <img> com a URL da imagem
-    return f'<img src="{image_url}" alt="QR Code">'
+    print(image_url)
+
+    return render_template('qrcode_download.html',image_url = image_url)
+
+
+
+@app.route('/verificar_pagamento/<charge_id>', methods=['GET'])
+def verificar_pagamento_pix(charge_id):
+    url = f"https://sandbox.api.pagseguro.com/orders/{charge_id}"
+
+    headers = {
+        "accept": "*/*",
+        "Authorization": "Bearer 7f19e2d0-2774-44e5-8d0e-7efefe8be849557ab247436f91b32802981b2e99fd681789-cfc4-47a4-a604-7f1c542bd135",
+        "content-type": "application/json"
+    }
+    
+    response = requests.get(url, headers=headers)
+    
+    # Verificar se a resposta foi bem-sucedida
+    if response.status_code == 200:
+        response_data = response.json()
+
+        # Extraia os dados necessários, com tratamento para ausência de campos
+        img_qrCode = response_data.get('qr_codes', [{}])[0].get('links', [{}])[0].get('href', '')
+        link_qrCode = response_data.get('qr_codes', [{}])[0].get('text', '')
+        status = response_data.get('links', [{}])[1].get('rel', '')
+
+        return jsonify({'img_qrCode': img_qrCode, 'link_qrCode': link_qrCode, 'status': status, 'charge_id': charge_id})
+    else:
+        # Retornar um erro apropriado se a resposta não for bem-sucedida
+        return jsonify({'error': 'Erro ao verificar pagamento'}), response.status_code

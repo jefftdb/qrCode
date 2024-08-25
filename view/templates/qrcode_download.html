@@ -1,0 +1,15 @@
+{% extends 'base_template.html' %}
+{% block content%}
+<body>
+    <div class="container mt-5">
+        <div class="card shadow-sm align-items-center">
+            <div class="card-body">
+                <h3 class="card-title text-center mb-4">QR Code:</h3>
+                <img src="{{url_for('static', filename=image_url)}}" alt="QR Code">                
+            </div>
+            <a href="{{url_for('static', filename=image_url)}}" download><button type="button" class="btn btn-success">Download</button></a>
+        </div>
+    </div>
+
+    
+{% endblock content%}

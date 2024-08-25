@@ -3,3 +3,5 @@ class Icon():
         self.name = name
         self.endereco = endereco
     
+    def to_dict(self):
+        return {'name': self.name, 'endereco': self.endereco}

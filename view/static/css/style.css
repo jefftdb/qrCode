@@ -1,0 +1,194 @@
+@import url("https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Open+Sans:wght@300;400&display=swap");
+/* --------------------------- Colors ------------------------- */
+/* ---------------------- Width & Heights --------------------- */
+/* --------------------------- Mixins -------------------------- */
+/* ------------------------ Functions ------------------------ */
+/* ------------------------ Reset CSS ----------------------- */
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* --------------------------- CSS -------------------------- */
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #90EE90;
+}
+
+
+.conteudo {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+}
+
+
+.rifa {
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+}
+.rifa .header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.rifa .header_title {  
+  font-size: 1.5em;
+  color: #555;
+}
+.rifa .header_subtitle {
+  font-weight: bolder;
+  color: #555;
+  text-align: center;
+  -ms-transform: rotate(-5deg); /* IE 9 */
+  -webkit-transform: rotate(-5deg); /* Safari */
+  transform: rotate(-5deg); /* Standard syntax */
+}
+
+.rifa .number-name {
+  color: #000000;
+}
+.rifa .numbers {
+  padding: 10px;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-column-gap: 10px;
+  grid-row-gap: 5px;
+}
+.rifa .numbers .number {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 35px;
+  border-radius: 100%;
+  background-color: #90EE90;
+  transition: all 0.4s ease-in-out;  
+}
+.rifa .numbers .number:hover {
+  border: 2px solid #228b22;
+  transform: scale(1.2);
+  background-color:#90EE90;
+  color: #228b22 !important;  
+}
+.rifa .numbers .number-reserved {  
+  background-color: #FFDAB9 !important;  
+}
+.rifa .numbers .number-reserved:hover {
+  border: 2px solid #FF4500 !important; 
+  color: #FF4500 !important;  
+}
+.break-word {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  padding: 10px;
+  margin: 10px;
+}
+.imagem_premio{
+  margin-bottom: 20px;
+  max-width: 250px;  
+}
+
+.img-fluid {
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h3 {
+  font-size: 1.5em;
+  color: #333;
+}
+
+@media (max-width: 768px) {
+  .info-box {
+      flex-direction: column;
+  }
+
+  .info-item {
+      margin-bottom: 10px;
+  }
+
+  .row.align-items-center {
+      flex-direction: column;
+  }
+}
+
+.info-box {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+  background-color: #f1f1f1;
+  border-radius: 8px;
+}
+
+.info-item {
+  text-align: center;
+  flex: 1;
+}
+
+/* ----------------------- Animations ----------------------- */
+@keyframes moveStars {
+  from {
+    transform: translateY(0px);
+  }
+  to {
+    transform: translateY(-1560px) translateX(-1560px);
+  }
+}
+@keyframes moveCloud {
+  from {
+    transform: translateX(-100px);
+  }
+  to {
+    transform: translateX(350px);
+  }
+}
+
+.payment-container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  text-align: center;
+}
+.qr-code {
+  max-width: 100%;
+  height: auto;
+  margin: 20px 0;
+}
+.copy-btn {
+  margin-top: 10px;
+}
+
+.icon-option {
+  border: 2px solid transparent;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.icon-option input[type="radio"] {
+  display: none;
+}
+
+.icon-option img {
+  width: 50px;
+  height: 50px;
+}
+
+.icon-option.selected {
+  border-color: #007bff;
+}
