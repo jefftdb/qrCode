@@ -4,25 +4,6 @@ from datetime import datetime, timezone,timedelta
 import os
 
 TOKEN = os.getenv('TOKEN')
-def getPublicKey():
-
-    url = "https://api.assinaturas.pagseguro.com/public-keys"
-
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": TOKEN
-    }
-
-    body = json.dumps({
-        "type":"carrd"
-    })
-
-    response = requests.put(url, headers=headers,data=body)
-
-    
-    return response.json()['public_key']
-
-
 
 def pagar_com_pix():
     agora = datetime.now(timezone.utc)
