@@ -39,7 +39,7 @@ def index():
             
             # Verifica o status do pagamento usando o charge_id          
             try:
-                response = requests.get(f"http://127.0.0.1:5000/verificar_pagamento/{charge_id}")
+                response = requests.get(f"https://qrcode-xmk8.onrender.com/verificar_pagamento/{charge_id}")
                 response_data = response.json()
                 img_qrCode = response_data.get('img_qrCode', '')
                 link_qrCode = response_data.get('link_qrCode', '')
