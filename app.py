@@ -57,7 +57,7 @@ def index():
                 
                 return jsonify({'error': 'Erro ao verificar pagamento'}), 500
      
-    return render_template('index.html', icones=icones, data=data)
+    return render_template('index.html', icones=icones)
 
 @app.route('/make_qr_code')
 def makeQrCode():
