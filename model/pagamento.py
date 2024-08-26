@@ -1,15 +1,16 @@
 import json
 import requests
 from datetime import datetime, timezone,timedelta
+import os
 
-
+TOKEN = os.getenv('TOKEN')
 def getPublicKey():
 
-    url = "https://sandbox.api.assinaturas.pagseguro.com/public-keys"
+    url = "https://api.assinaturas.pagseguro.com/public-keys"
 
     headers = {
         "Content-Type": "application/json",
-        "Authorization": "7f19e2d0-2774-44e5-8d0e-7efefe8be849557ab247436f91b32802981b2e99fd681789-cfc4-47a4-a604-7f1c542bd135"
+        "Authorization": TOKEN
     }
 
     body = json.dumps({
@@ -27,12 +28,12 @@ def pagar_com_pix():
     agora = datetime.now(timezone.utc)
     data_expiracao = agora + timedelta(minutes=30)
     
-    url = "https://sandbox.api.pagseguro.com/orders"
+    url = "https://api.pagseguro.com/orders"
 
     headers = {
         "accept": "*/*",
         "Content-Type": "application/json",
-        "Authorization": "Bearer 7f19e2d0-2774-44e5-8d0e-7efefe8be849557ab247436f91b32802981b2e99fd681789-cfc4-47a4-a604-7f1c542bd135"
+        "Authorization": "Bearer" + TOKEN
     }
 
     body = json.dumps({

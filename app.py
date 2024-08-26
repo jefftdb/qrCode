@@ -6,7 +6,7 @@ from PIL import Image
 from model.icon import Icon
 from model.icon_list import icon_list
 import os
-from model.pagamento import getPublicKey,pagar_com_pix
+from model.pagamento import getPublicKey,pagar_com_pix,TOKEN
 from flask_wtf.csrf import CSRFProtect
 
 
@@ -108,7 +108,7 @@ def verificar_pagamento_pix(charge_id):
 
     headers = {
         "accept": "*/*",
-        "Authorization": "Bearer 7f19e2d0-2774-44e5-8d0e-7efefe8be849557ab247436f91b32802981b2e99fd681789-cfc4-47a4-a604-7f1c542bd135",
+        "Authorization": "Bearer" + TOKEN,
         "content-type": "application/json"
     }
     
@@ -127,3 +127,7 @@ def verificar_pagamento_pix(charge_id):
     else:
         # Retornar um erro apropriado se a resposta não for bem-sucedida
         return jsonify({'error': 'Erro ao verificar pagamento'}), response.status_code
+
+
+if __name__== '__main__':
+    app.run()
