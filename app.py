@@ -6,7 +6,7 @@ from PIL import Image
 from model.icon import Icon
 from model.icon_list import icon_list
 import os
-from model.pagamento import getPublicKey,pagar_com_pix,TOKEN
+from model.pagamento import pagar_com_pix,TOKEN
 from flask_wtf.csrf import CSRFProtect
 
 
