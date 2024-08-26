@@ -17,7 +17,7 @@ icon_list = {
     },
     'x':{
         'name':'x',
-        'link':'icon/x.png'
+        'link':'icon/X.png'
  
     },
     'pix':{
