@@ -26,9 +26,7 @@ for key, value in icon_list.items():
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    data = {}
-    data['publickey'] = getPublicKey()
-
+    
     if request.method == 'POST':
         link = request.form['link']
         icon_name = request.form['icon']
