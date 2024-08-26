@@ -106,7 +106,7 @@ def verificar_pagamento_pix(charge_id):
 
     headers = {
         "accept": "*/*",
-        "Authorization": "Bearer" + TOKEN,
+        "Authorization": "Bearer 80eee03f-fabb-4c81-bd8f-bacfd70c53cddd29222947a8b89fef95438c0c84f6679858-601e-4391-a268-c4033d1e7013",
         "content-type": "application/json"
     }
     
