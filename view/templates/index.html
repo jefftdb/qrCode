@@ -4,8 +4,23 @@
     <div class="container mt-5">
         <div class="card shadow-sm">
             <div class="card-body">
-                <h3 class="card-title text-center mb-4">QR Code:</h3>
-                <form method="POST">                    
+                <h5 class="card-title text-center mb-4">Crie um QR-Code personalizado por apenas R$5,00.</h5>
+                <form method="POST">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="nome" class="form-label">Nome:</label>
+                            <input type="text" class="form-control" id="nome" name ="nome" placeholder="nome" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">E-mail:</label>
+                            <input type="email" class="form-control" id="email" name ="email" placeholder="E-mail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="CPF" class="form-label">CPF:</label>
+                            <input type="text" class="form-control" id="CPF" name ="CPF" placeholder="CPF" required>
+                        </div>                        
+                    </div>
+                    <h3 class="card-title text-center mb-4">QR Code:</h3>                    
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <div class="mb-3">
                         <label for="link" class="form-label">Insira o link:</label>
@@ -16,13 +31,11 @@
                         {% for icone in icones %}
                         {% if loop.index == 1 or (loop.index - 1) % 6 == 0 %}
                             <div class="d-flex justify-content-center align-items-center flex-wrap">
-                        {% endif %}
-                    
-                        <label class="icon-option">
-                            <input type="radio" name="icon" value="{{ icone.name }}" required>
-                            <img src="{{ url_for('static', filename=icone.endereco) }}" alt="{{ icone.name }}">
-                        </label>
-                    
+                        {% endif %}                               
+                            <label class="icon-option">
+                                <input type="radio" name="icon" value="{{ icone.name }}" required>
+                                <img src="{{ url_for('static', filename=icone.endereco) }}" alt="{{ icone.name }}">
+                            </label>                            
                         {% if loop.index % 6 == 0 or loop.last %}
                             </div>
                         {% endif %}

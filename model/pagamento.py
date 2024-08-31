@@ -3,30 +3,30 @@ import requests
 from datetime import datetime, timezone,timedelta
 import os
 
-TOKEN = os.getenv('TOKEN')
 
-def pagar_com_pix():
+
+def pagar_com_pix(nome,email,cpf):
     agora = datetime.now(timezone.utc)
     data_expiracao = agora + timedelta(minutes=30)
     
     url = "https://api.pagseguro.com/orders"
 
     headers = {
-        "accept": "*/*",
-        "Content-Type": "application/json",
-        "Authorization": "Bearer 80eee03f-fabb-4c81-bd8f-bacfd70c53cddd29222947a8b89fef95438c0c84f6679858-601e-4391-a268-c4033d1e7013" 
+        "accept": "*/*",        
+        "Authorization": "Bearer 80eee03f-fabb-4c81-bd8f-bacfd70c53cddd29222947a8b89fef95438c0c84f6679858-601e-4391-a268-c4033d1e7013",
+        "Content-Type": "application/json"
     }
 
     body = json.dumps({
-        "reference_id": "ex-00001",
+        "reference_id": "OC-" + agora.strftime('%d/%m/%Y'),
         "amount": {
             "value": 500,  # valor em centavos (R$ 5,00)
             "currency": "BRL"
         },
         "customer": {
-            "name": "Jefferson",
-            "email": "Jefftdb2@gmail.com",
-            "tax_id": "13107000795",
+            "name": nome,
+            "email": email,
+            "tax_id": cpf,
             "phones": [
                 {
                     "country": "55",
@@ -68,14 +68,20 @@ def pagar_com_pix():
         ]
     })
     
-    response = requests.post(url, headers=headers, data=body)
-    response_data = response.json()
-    
-    # Tente capturar o ID correto a partir da resposta, pode ser que esteja em outro campo
-    charge_id = response_data.get('id')  # Verifique se 'id' ou 'qr_codes' contém o charge_id correto
-    
-    
-    return charge_id
+    response = requests.post(url,data=body,headers=headers)
+    print(response.status_code)
+    if response.status_code == 201:
+        response_data = response.json()
+        charge_id = response_data['id']
+        img_qrCode = response_data['qr_codes'][0]['links'][0]['href']
+        link_qrCode = response_data['qr_codes'][0]['text']
+        expiration_date = response_data['qr_codes'][0]['expiration_date']
+        return charge_id, link_qrCode, img_qrCode,expiration_date
+    else:
+        print(f"Erro ao criar a ordem de pagamento: {response.status_code}")
+        print(f"Detalhes do erro: {response.text}")
+        return None
+
 
 
 

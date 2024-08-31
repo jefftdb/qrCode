@@ -1,4 +1,8 @@
 icon_list = {
+        'ban':{
+        'name':'ban',
+        'link': 'icon/ban.svg'
+    },
     'facebook':{
         'name':'facebook',
         'link': 'icon/facebook.png'
