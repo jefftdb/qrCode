@@ -6,7 +6,7 @@
         <h2><img style="width: 80px; height: 80px;" src="{{url_for('static', filename='icon/pix.png' )}}">Pagamento com Pix</h2>
         <p>Utilize o QR Code abaixo para realizar o pagamento.</p>
         <p>Apos o apagamento espere 40 segundos e será redirecionado para a pagina de dwonload do seu QRcode personalizado.</p>
-        <p> Esse link de pagamento expira as {{expiration_date}}</p>
+        <p>Esse link de pagamento expira no dia {{ expiration_date.strftime('%d') }} de {{ expiration_date.strftime('%B') }} de {{ expiration_date.strftime('%Y') }} às {{ expiration_date.strftime('%H')}} : {{ expiration_date.strftime('%M') }}</p>
         
         <img class="img-fluid qr-code" id="modalQRCode" src="{{img_qrCode}}" alt="QR Code"></p> 
         <p>Ou copie o código Pix abaixo:</p>

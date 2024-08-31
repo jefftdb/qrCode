@@ -76,7 +76,8 @@ def pagar_com_pix(nome,email,cpf):
         img_qrCode = response_data['qr_codes'][0]['links'][0]['href']
         link_qrCode = response_data['qr_codes'][0]['text']
         expiration_date = response_data['qr_codes'][0]['expiration_date']
-        return charge_id, link_qrCode, img_qrCode,expiration_date
+        expiration_date_str = datetime.fromisoformat(expiration_date)
+        return charge_id, link_qrCode, img_qrCode,expiration_date_str
     else:
         print(f"Erro ao criar a ordem de pagamento: {response.status_code}")
         print(f"Detalhes do erro: {response.text}")
